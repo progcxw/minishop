@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"moshopserver/utils"
+	"minishop/utils"
 
 	"github.com/astaxie/beego/orm"
 )

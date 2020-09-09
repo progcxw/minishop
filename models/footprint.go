@@ -1,7 +1,7 @@
 package models
 
 import (
-	"moshopserver/utils"
+	"minishop/utils"
 
 	"github.com/astaxie/beego/orm"
 )

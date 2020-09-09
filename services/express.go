@@ -5,7 +5,7 @@ import (
 
 	"github.com/astaxie/beego/httplib"
 
-	"moshopserver/utils"
+	"minishop/utils"
 
 	"github.com/astaxie/beego"
 )

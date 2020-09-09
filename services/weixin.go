@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"moshopserver/utils"
+	"minishop/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"

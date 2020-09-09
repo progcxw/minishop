@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"moshopserver/models"
-	"moshopserver/services"
-	"moshopserver/utils"
+	"minishop/models"
+	"minishop/services"
+	"minishop/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

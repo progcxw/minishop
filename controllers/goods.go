@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"net/url"
 
-	"moshopserver/models"
-	"moshopserver/utils"
+	"minishop/models"
+	"minishop/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

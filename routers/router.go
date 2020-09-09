@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"moshopserver/controllers"
+	"minishop/controllers"
 
 	"github.com/astaxie/beego"
 )

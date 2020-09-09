@@ -1,12 +1,12 @@
 package main
 
 import (
-	_ "moshopserver/controllers"
-	_ "moshopserver/models"
-	_ "moshopserver/routers"
-	"moshopserver/services"
-	_ "moshopserver/services"
-	_ "moshopserver/utils"
+	_ "minishop/controllers"
+	_ "minishop/models"
+	_ "minishop/routers"
+	"minishop/services"
+	_ "minishop/services"
+	_ "minishop/utils"
 
 	"github.com/astaxie/beego"
 )

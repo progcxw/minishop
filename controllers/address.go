@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 
-	"moshopserver/models"
-	"moshopserver/utils"
+	"minishop/models"
+	"minishop/utils"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"moshopserver/services"
-	"moshopserver/utils"
+	"minishop/services"
+	"minishop/utils"
 )
 
 // type BaseController struct {
