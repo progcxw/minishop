@@ -28,7 +28,6 @@ type DetailRtnJson struct {
 	Issues         []models.MinishopGoodsIssue   `json:"issue"`
 	UserHasCollect int                           `json:"userHasCollect"`
 	Comment        Comment                       `json:"comment"`
-	Brand          models.MinishopBrand          `json:"brand"`
 }
 
 type CategoryRtnJson struct {
@@ -164,10 +163,6 @@ func (this *GoodsController) Goods_Detail() {
 	issue := new(models.MinishopGoodsIssue)
 	o.QueryTable(issue).All(&issues)
 
-	var brandone models.MinishopBrand
-	brand := new(models.MinishopBrand)
-	o.QueryTable(brand).Filter("id", goodone.BrandId).One(&brandone)
-
 	comment := new(models.MinishopComment)
 	commentCount, _ := o.QueryTable(comment).Filter("value_id", intGoodsId).Filter("type_id", 0).Count()
 	var hotcommentone models.MinishopComment
@@ -199,7 +194,7 @@ func (this *GoodsController) Goods_Detail() {
 	slist := models.GetSpecificationList(intGoodsId)
 
 	utils.ReturnHTTPSuccess(&this.Controller, DetailRtnJson{Goods: goodone, Galleries: galleries, Attribute: attributes,
-		UserHasCollect: userhascollect, Issues: issues, Comment: commentval, Brand: *brand,
+		UserHasCollect: userhascollect, Issues: issues, Comment: commentval,
 		SkuRtnJson: SkuRtnJson{ProductList: plist, SpecificationList: slist}})
 	this.ServeJSON()
 }

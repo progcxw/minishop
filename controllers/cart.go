@@ -318,15 +318,12 @@ type CartAddress struct {
 }
 
 type CheckoutRtnJson struct {
-	Address          CartAddress                 `json:"checkedAddress"`
-	FreightPrice     float64                     `json:"freightPrice"`
-	CheckedCoupon    []models.MinishopUserCoupon `json:"checkedCoupon"`
-	CouponList       []models.MinishopUserCoupon `json:"couponList"`
-	CouponPrice      float64                     `json:"couponPrice"`
-	CheckedGoodsList []models.MinishopCart       `json:"checkedGoodsList"`
-	GoodsTotalPrice  float64                     `json:"goodsTotalPrice"`
-	OrderTotalPrice  float64                     `json:"orderTotalPrice"`
-	ActualPrice      float64                     `json:"actualPrice"`
+	Address          CartAddress           `json:"checkedAddress"`
+	FreightPrice     float64               `json:"freightPrice"`
+	CheckedGoodsList []models.MinishopCart `json:"checkedGoodsList"`
+	GoodsTotalPrice  float64               `json:"goodsTotalPrice"`
+	OrderTotalPrice  float64               `json:"orderTotalPrice"`
+	ActualPrice      float64               `json:"actualPrice"`
 }
 
 func (this *CartController) Cart_Checkout() {
@@ -363,10 +360,6 @@ func (this *CartController) Cart_Checkout() {
 		}
 	}
 
-	usercoupontable := new(models.MinishopUserCoupon)
-	var couponlist []models.MinishopUserCoupon
-	o.QueryTable(usercoupontable).All(&couponlist)
-
 	var couponPrice float64 = 0.0
 
 	goodstotalprice := cartData.CartTotal.CheckedGoodsAmount
@@ -377,8 +370,6 @@ func (this *CartController) Cart_Checkout() {
 		Address:      customaddress,
 		FreightPrice: freightPrice,
 		// checkedCoupon: {},
-		CouponList:       couponlist,
-		CouponPrice:      couponPrice,
 		CheckedGoodsList: checkedgoodslist,
 		GoodsTotalPrice:  goodstotalprice,
 		OrderTotalPrice:  ordertotalprice,

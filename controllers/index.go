@@ -19,12 +19,7 @@ type newCategoryList struct {
 }
 
 type IndexRtnJson struct {
-	Banners      []models.MinishopAd      `json:"banner"`
 	Channels     []models.MinishopChannel `json:"channel"`
-	Newgoods     []orm.Params             `json:"newGoodsList"`
-	Hotgoods     []orm.Params             `json:"hotGoodsList"`
-	BrandList    []models.MinishopBrand   `json:"brandList"`
-	TopicList    []models.MinishopTopic   `json:"topicList"`
 	CategoryList []newCategoryList        `json:"categoryList"`
 }
 
@@ -53,10 +48,6 @@ func updateJsonKeysIndex(vals []orm.Params) {
 func (this *IndexController) Index_Index() {
 	o := orm.NewOrm()
 
-	var banners []models.MinishopAd
-	ad := new(models.MinishopAd)
-	o.QueryTable(ad).Filter("ad_position_id", 1).All(&banners)
-
 	var channels []models.MinishopChannel
 	channel := new(models.MinishopChannel)
 	o.QueryTable(channel).OrderBy("sort_order").All(&channels)
@@ -65,18 +56,6 @@ func (this *IndexController) Index_Index() {
 	goods := new(models.MinishopGoods)
 	o.QueryTable(goods).Filter("is_new", 1).Limit(4).Values(&newgoods, "id", "name", "list_pic_url", "retail_price")
 	updateJsonKeysIndex(newgoods)
-
-	var hotgoods []orm.Params
-	o.QueryTable(goods).Filter("is_hot", 1).Limit(3).Values(&hotgoods, "id", "name", "list_pic_url", "retail_price", "goods_brief")
-	updateJsonKeysIndex(hotgoods)
-
-	var brandList []models.MinishopBrand
-	brand := new(models.MinishopBrand)
-	o.QueryTable(brand).Filter("is_new", 1).OrderBy("new_sort_order").Limit(4).All(&brandList)
-
-	var topicList []models.MinishopTopic
-	topic := new(models.MinishopTopic)
-	o.QueryTable(topic).Limit(3).All(&topicList)
 
 	var categoryList []models.MinishopCategory
 	category := new(models.MinishopCategory)
@@ -101,7 +80,7 @@ func (this *IndexController) Index_Index() {
 		newList = append(newList, newCategoryList{categoryItem.Id, categoryItem.Name, categorygoods})
 	}
 
-	utils.ReturnHTTPSuccess(&this.Controller, IndexRtnJson{banners, channels, newgoods, hotgoods, brandList, topicList, newList})
+	utils.ReturnHTTPSuccess(&this.Controller, IndexRtnJson{channels, newList})
 
 	this.ServeJSON()
 

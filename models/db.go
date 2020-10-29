@@ -8,26 +8,6 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type MinishopAd struct {
-	AdPositionId int    `json:"ad_position_id"`
-	Content      string `json:"content"`
-	Enabled      int    `json:"enabled"`
-	EndTime      int    `json:"end_time"`
-	Id           int    `json:"id"`
-	ImageUrl     string `json:"image_url"`
-	Link         string `json:"link"`
-	MediaType    int    `json:"media_type"`
-	Name         string `json:"name"`
-}
-
-type MinishopAdPosition struct {
-	Desc   string `json:"desc"`
-	Height int    `json:"height"`
-	Id     int    `json:"id"`
-	Name   string `json:"name"`
-	Width  int    `json:"width"`
-}
-
 type MinishopAddress struct {
 	Address    string `json:"address"`
 	CityId     int    `json:"city_id"`
@@ -67,21 +47,6 @@ type MinishopAttributeCategory struct {
 	Enabled int    `json:"enabled"`
 	Id      int    `json:"id"`
 	Name    string `json:"name"`
-}
-
-type MinishopBrand struct {
-	AppListPicUrl string `json:"app_list_pic_url"`
-	FloorPrice    string `json:"floor_price"`
-	Id            int    `json:"id"`
-	IsNew         int    `json:"is_new"`
-	IsShow        int    `json:"is_show"`
-	ListPicUrl    string `json:"list_pic_url"`
-	Name          string `json:"name"`
-	NewPicUrl     string `json:"new_pic_url"`
-	NewSortOrder  int    `json:"new_sort_order"`
-	PicUrl        string `json:"pic_url"`
-	SimpleDesc    string `json:"simple_desc"`
-	SortOrder     int    `json:"sort_order"`
 }
 
 type MinishopCart struct {
@@ -152,20 +117,6 @@ type MinishopCommentPicture struct {
 	Id        int    `json:"id"`
 	PicUrl    string `json:"pic_url"`
 	SortOrder int    `json:"sort_order"`
-}
-
-type MinishopCoupon struct {
-	Id             int    `json:"id"`
-	MaxAmount      string `json:"max_amount"`
-	MinAmount      string `json:"min_amount"`
-	MinGoodsAmount string `json:"min_goods_amount"`
-	Name           string `json:"name"`
-	SendEndDate    int    `json:"send_end_date"`
-	SendStartDate  int    `json:"send_start_date"`
-	SendType       int    `json:"send_type"`
-	TypeMoney      string `json:"type_money"`
-	UseEndDate     int    `json:"use_end_date"`
-	UseStartDate   int    `json:"use_start_date"`
 }
 
 type MinishopFeedback struct {
@@ -373,29 +324,6 @@ type MinishopSpecification struct {
 	SortOrder int    `json:"sort_order"`
 }
 
-type MinishopTopic struct {
-	Avatar          string `json:"avatar"`
-	Content         string `json:"content"`
-	Id              int    `json:"id"`
-	IsShow          int    `json:"is_show"`
-	ItemPicUrl      string `json:"item_pic_url"`
-	PriceInfo       string `json:"price_info"`
-	ReadCount       string `json:"read_count"`
-	ScenePicUrl     string `json:"scene_pic_url"`
-	SortOrder       int    `json:"sort_order"`
-	Subtitle        string `json:"subtitle"`
-	Title           string `json:"title"`
-	TopicCategoryId int    `json:"topic_category_id"`
-	TopicTagId      int    `json:"topic_tag_id"`
-	TopicTemplateId int    `json:"topic_template_id"`
-}
-
-type MinishopTopicCategory struct {
-	Id     int    `json:"id"`
-	PicUrl string `json:"pic_url"`
-	Title  string `json:"title"`
-}
-
 type MinishopUser struct {
 	Avatar        string `json:"avatar"`
 	Birthday      int    `json:"birthday"`
@@ -411,15 +339,6 @@ type MinishopUser struct {
 	UserLevelId   int    `json:"user_level_id"`
 	Username      string `json:"username"`
 	WeixinOpenid  string `json:"weixin_openid"`
-}
-
-type MinishopUserCoupon struct {
-	CouponId     int    `json:"coupon_id"`
-	CouponNumber string `json:"coupon_number"`
-	Id           int    `json:"id"`
-	OrderId      int    `json:"order_id"`
-	UsedTime     int    `json:"used_time"`
-	UserId       int    `json:"user_id"`
 }
 
 type MinishopUserLevel struct {
@@ -442,14 +361,11 @@ func init() {
 	}
 
 	// register model
-	orm.RegisterModel(new(MinishopAd))
-	orm.RegisterModel(new(MinishopAdPosition))
 	orm.RegisterModel(new(MinishopAddress))
 	orm.RegisterModel(new(MinishopAdmin))
 	orm.RegisterModel(new(MinishopAttribute))
 	orm.RegisterModel(new(MinishopAttributeCategory))
 
-	orm.RegisterModel(new(MinishopBrand))
 	orm.RegisterModel(new(MinishopCart))
 	orm.RegisterModel(new(MinishopCategory))
 
@@ -458,7 +374,6 @@ func init() {
 	orm.RegisterModel(new(MinishopComment))
 	orm.RegisterModel(new(MinishopCommentPicture))
 
-	orm.RegisterModel(new(MinishopCoupon))
 	orm.RegisterModel(new(MinishopFeedback))
 
 	orm.RegisterModel(new(MinishopFootprint))
@@ -485,11 +400,8 @@ func init() {
 
 	orm.RegisterModel(new(MinishopShipper))
 	orm.RegisterModel(new(MinishopSpecification))
-	orm.RegisterModel(new(MinishopTopic))
-	orm.RegisterModel(new(MinishopTopicCategory))
 
 	orm.RegisterModel(new(MinishopUser))
-	orm.RegisterModel(new(MinishopUserCoupon))
 	orm.RegisterModel(new(MinishopUserLevel))
 
 }

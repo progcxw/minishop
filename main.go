@@ -17,8 +17,8 @@ func main() {
 	beego.BConfig.CopyRequestBody = true
 
 	beego.BConfig.WebConfig.Session.SessionOn = true
-	beego.BConfig.Listen.HTTPAddr = "127.0.0.1"
-	beego.BConfig.Listen.HTTPPort = 8080
+	beego.BConfig.Listen.HTTPAddr = "0.0.0.0"
+	beego.BConfig.Listen.HTTPPort = 8360
 
 	beego.InsertFilter("/api/*", beego.BeforeExec, services.FilterFunc, true, true)
 

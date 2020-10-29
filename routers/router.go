@@ -22,9 +22,6 @@ func init() {
 	beego.Router("api/goods/hot", &controllers.GoodsController{}, "get:Goods_Hot")
 	beego.Router("api/goods/related", &controllers.GoodsController{}, "get:Goods_Related")
 
-	beego.Router("api/brand/list", &controllers.BrandController{}, "get:Brand_List")
-	beego.Router("api/brand/detail", &controllers.BrandController{}, "get:Brand_Detail")
-
 	beego.Router("api/cart/index", &controllers.CartController{}, "get:Cart_Index")
 	beego.Router("api/cart/add", &controllers.CartController{}, "post:Cart_Add")
 	beego.Router("api/cart/update", &controllers.CartController{}, "post:Cart_Update")
@@ -41,10 +38,6 @@ func init() {
 	beego.Router("api/comment/list", &controllers.CommentController{}, "get:Comment_List")
 	beego.Router("api/comment/count", &controllers.CommentController{}, "get:Comment_Count")
 	beego.Router("api/comment/post", &controllers.CommentController{}, "post:Comment_Post")
-
-	beego.Router("api/topic/list", &controllers.TopicController{}, "get:Topic_List")
-	beego.Router("api/topic/detail", &controllers.TopicController{}, "get:Topic_Detail")
-	beego.Router("api/topic/related", &controllers.TopicController{}, "get:Topic_Related")
 
 	beego.Router("api/search/index", &controllers.SearchController{}, "get:Search_Index")
 	//beego.Router("api/search/result", &controllers.SearchController{}, "get:Topic_Detail")
