@@ -81,7 +81,7 @@ func getControllerAndAction(rawvalue string) (controller, action string) {
 	return vals[2], vals[2] + "/" + vals[3]
 }
 
-//LoginUserId 保存登陆过的用户id，需优化
+//LoginUserId 保存登陆过的用户id
 var LoginUserId string
 
 //FilterFunc 每次访问服务器执行的函数，这里单纯地打印一下访问的url，方便调试

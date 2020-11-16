@@ -1,7 +1,41 @@
 package utils
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego"
+)
+
+// 存储类型(表示文件存到哪里)
+type StoreType int
+
+const (
+	_ StoreType = iota
+	// StoreLocal : 节点本地
+	StoreLocal
+	// StoreCeph : Ceph集群
+	StoreCeph
+	// StoreOSS : 阿里OSS
+	StoreOSS
+	// StoreMix : 混合(Ceph及OSS)
+	StoreMix
+	// StoreAll : 所有类型的存储都存一份数据
+	StoreAll
+)
+
+const (
+	// TempLocalRootDir : 本地临时存储地址的路径
+	TempLocalRootDir = "/data/fileserver_tmp/"
+	// MergeLocalRootDir : 本地存储地址的路径(包含普通上传及分块上传)
+	MergeLocalRootDir = "/data/fileserver_merge/"
+	// ChunckLocalRootDir : 分块存储地址的路径
+	ChunckLocalRootDir = "/data/fileserver_chunk/"
+	// CephRootDir : Ceph的存储路径prefix
+	CephRootDir = "/ceph"
+	// OSSRootDir : OSS的存储路径prefix
+	OSSRootDir = "oss/"
+	// CurrentStoreType : 设置当前文件的存储类型
+	CurrentStoreType = StoreLocal
 )
 
 /*
@@ -20,5 +54,8 @@ import (
 */
 
 func init() {
-	beego.LoadAppConfig("ini", "conf/config.conf")
+	err := beego.LoadAppConfig("ini", "conf/config.conf")
+	if err != nil {
+		fmt.Println("config load error: ", err)
+	}
 }

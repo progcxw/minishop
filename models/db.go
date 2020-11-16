@@ -347,6 +347,15 @@ type MinishopUserLevel struct {
 	Name        string `json:"name"`
 }
 
+// TableFile : 文件表结构体
+type MinishopPic struct {
+	Id       int
+	FileHash string
+	FileName string
+	FileSize int64
+	FileAddr string
+}
+
 // type User struct {
 // 	Id   int    `orm:"not null pk autoincr INT(11)"`
 // 	Name string `orm:"not null default '' VARCHAR(100)"`
@@ -404,4 +413,5 @@ func init() {
 	orm.RegisterModel(new(MinishopUser))
 	orm.RegisterModel(new(MinishopUserLevel))
 
+	orm.RegisterModel(new(MinishopPic))
 }

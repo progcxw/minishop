@@ -60,4 +60,5 @@ func init() {
 	beego.Router("api/footprint/list", &controllers.FootprintController{}, "get:Footprint_List")
 	beego.Router("api/footprint/delete", &controllers.FootprintController{}, "post:Footprint_Delete")
 
+	beego.Router("api/upload/upload", &controllers.PicstoreController{}, "post:DoUploadHandler")
 }

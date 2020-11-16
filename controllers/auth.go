@@ -64,6 +64,7 @@ func (this *AuthController) Auth_LoginByWeixin() {
 
 	sessionKey := services.Create(utils.Int2String(user.Id))
 	services.LoginUserId = utils.Int2String(user.Id)
+	fmt.Println(services.LoginUserId)
 	//fmt.Println("sessionkey==" + sessionKey)
 
 	rtnInfo := make(map[string]interface{})
