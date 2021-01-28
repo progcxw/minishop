@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego/orm"
 )
 
@@ -8,7 +10,7 @@ import (
 func OnFileUploadFinished(filehash string, filename string, filesize int64, fileaddr string) bool {
 	o := orm.NewOrm()
 	pic := MinishopPic{
-		FileHash: filehash,
+		FileSha1: filehash,
 		FileName: filename,
 		FileSize: filesize,
 		FileAddr: fileaddr,
@@ -16,6 +18,7 @@ func OnFileUploadFinished(filehash string, filename string, filesize int64, file
 
 	_, err := o.Insert(&pic)
 	if err != nil {
+		fmt.Println("pic insert error")
 		return false
 	}
 

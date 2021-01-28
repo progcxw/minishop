@@ -19,8 +19,9 @@ type newCategoryList struct {
 }
 
 type IndexRtnJson struct {
-	Channels     []models.MinishopChannel `json:"channel"`
-	CategoryList []newCategoryList        `json:"categoryList"`
+	Channels     []models.MinishopChannel   `json:"channel"`
+	PostGoods    []models.MinishopPostGoods `json:"postGoods"`
+	CategoryList []newCategoryList          `json:"categoryList"`
 }
 
 func updateJsonKeysIndex(vals []orm.Params) {
@@ -61,6 +62,10 @@ func (this *IndexController) Index_Index() {
 	category := new(models.MinishopCategory)
 	o.QueryTable(category).Filter("parent_id", 0).Exclude("name", "推荐").All(&categoryList)
 
+	postGoods := new(models.MinishopPostGoods)
+	var allPostGoods []models.MinishopPostGoods
+	o.QueryTable(postGoods).All(&allPostGoods)
+
 	var newList []newCategoryList
 
 	for _, categoryItem := range categoryList {
@@ -80,7 +85,7 @@ func (this *IndexController) Index_Index() {
 		newList = append(newList, newCategoryList{categoryItem.Id, categoryItem.Name, categorygoods})
 	}
 
-	utils.ReturnHTTPSuccess(&this.Controller, IndexRtnJson{channels, newList})
+	utils.ReturnHTTPSuccess(&this.Controller, IndexRtnJson{channels, allPostGoods, newList})
 
 	this.ServeJSON()
 

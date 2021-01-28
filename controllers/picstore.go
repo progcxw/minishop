@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"os"
 
 	"minishop/models"
 	"minishop/utils"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 type PicstoreController struct {
@@ -18,8 +18,9 @@ type PicstoreController struct {
 }
 
 type JsonType struct {
-	code int
-	msg  string
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Url  string `json:"filesha1"`
 }
 
 func init() {
@@ -36,23 +37,22 @@ func init() {
 // DoUploadHandler ： 处理文件上传
 func (this *PicstoreController) DoUploadHandler() {
 	errCode := 0
+	var url string
+
 	defer func() {
-		this.Ctx.Output.Header("Access-Control-Allow-Origin", "*")
-		this.Ctx.Output.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 		if errCode < 0 {
-			this.Data["json"] = &JsonType{errCode, "上传失败"}
+			utils.ReturnHTTPSuccess(&this.Controller, JsonType{errCode, "上传失败", ""})
 			this.ServeJSON()
 		} else {
-			this.Data["json"] = &JsonType{errCode, "上传成功"}
+			utils.ReturnHTTPSuccess(&this.Controller, JsonType{errCode, "上传成功", url})
 			this.ServeJSON()
 		}
 	}()
 
-	fmt.Println("going into file upload")
 	// 1. 从form表单中获得文件内容句柄
 	file, head, err := this.GetFile("file")
 	if err != nil {
-		log.Printf("Failed to get form data, err:%s\n", err.Error())
+		fmt.Printf("Failed to get form data, err:%s\n", err.Error())
 		errCode = -1
 		return
 	}
@@ -61,7 +61,7 @@ func (this *PicstoreController) DoUploadHandler() {
 	// 2. 把文件内容转为[]byte
 	buf := bytes.NewBuffer(nil)
 	if _, err := io.Copy(buf, file); err != nil {
-		log.Printf("Failed to get file data, err:%s\n", err.Error())
+		fmt.Printf("Failed to get file data, err:%s\n", err.Error())
 		errCode = -2
 		return
 	}
@@ -69,15 +69,17 @@ func (this *PicstoreController) DoUploadHandler() {
 	// 3. 构建文件元信息
 	fileMeta := models.MinishopPic{
 		FileName: head.Filename,
-		FileHash: utils.Sha1(buf.Bytes()), //　计算文件sha1
+		FileSha1: utils.Sha1(buf.Bytes()), //　计算文件sha1
 		FileSize: int64(len(buf.Bytes())),
 	}
+
+	url = utils.PicStoreAPI + fileMeta.FileSha1
 
 	// 4. 将文件写入临时存储位置
 	fileMeta.FileAddr = utils.MergeLocalRootDir + fileMeta.FileName // 存储地址
 	newFile, err := os.Create(fileMeta.FileAddr)
 	if err != nil {
-		log.Printf("Failed to create file, err:%s\n", err.Error())
+		fmt.Printf("Failed to create file, err:%s\n", err.Error())
 		errCode = -3
 		return
 	}
@@ -85,17 +87,28 @@ func (this *PicstoreController) DoUploadHandler() {
 
 	nByte, err := newFile.Write(buf.Bytes())
 	if int64(nByte) != fileMeta.FileSize || err != nil {
-		log.Printf("Failed to save data into file, writtenSize:%d, err:%s\n", nByte, err.Error())
+		fmt.Printf("Failed to save data into file, writtenSize:%d, err:%s\n", nByte, err.Error())
 		errCode = -4
 		return
 	}
 
 	//6.  更新文件表记录
-	ret := models.OnFileUploadFinished(fileMeta.FileHash, fileMeta.FileName, fileMeta.FileSize, fileMeta.FileAddr)
+	ret := models.OnFileUploadFinished(fileMeta.FileSha1, fileMeta.FileName, fileMeta.FileSize, fileMeta.FileAddr)
 	if !ret {
 		errCode = -6
 		return
 	}
 
 	// 7. 更新用户文件表
+}
+
+// DownloadHandler : 文件下载接口
+func (this *PicstoreController) DownloadHandler() {
+	fileSha1 := this.GetString("fileSha1")
+
+	o := orm.NewOrm()
+	fileMeta := new(models.MinishopPic)
+	o.QueryTable(fileMeta).Filter("fileSha1", fileSha1).One(fileMeta)
+
+	this.Ctx.Output.Download(fileMeta.FileAddr, fileMeta.FileName)
 }

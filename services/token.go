@@ -84,6 +84,9 @@ func getControllerAndAction(rawvalue string) (controller, action string) {
 //LoginUserId 保存登陆过的用户id
 var LoginUserId string
 
+//UserLocation 保存用户当前所在城市
+var UserLocation string
+
 //FilterFunc 每次访问服务器执行的函数，这里单纯地打印一下访问的url，方便调试
 func FilterFunc(ctx *context.Context) {
 	controller, action := getControllerAndAction(ctx.Request.RequestURI)

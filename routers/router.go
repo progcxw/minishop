@@ -14,6 +14,16 @@ func init() {
 
 	beego.Router("api/auth/loginByWeixin", &controllers.AuthController{}, "post:Auth_LoginByWeixin")
 
+	beego.Router("ws/open", &controllers.ChatController{}, "get:OnOpen")
+	beego.Router("api/ws/close", &controllers.ChatController{}, "post:OnClose")
+	beego.Router("api/chat/index", &controllers.ChatController{}, "get:GetChatIndex")
+	beego.Router("api/chat/form", &controllers.ChatController{}, "get:GetChatForm")
+
+	beego.Router("api/post/goods", &controllers.PostController{}, "post:PostGoodsHandler")
+	beego.Router("api/post/location", &controllers.PostController{}, "post:Post_CityLocation")
+	beego.Router("api/post/pic", &controllers.PicstoreController{}, "post:DoUploadHandler")
+	beego.Router("api/image/get", &controllers.PicstoreController{}, "get:DownloadHandler")
+
 	beego.Router("api/goods/count", &controllers.GoodsController{}, "get:Goods_Count")
 	beego.Router("api/goods/list", &controllers.GoodsController{}, "get:Goods_List")
 	beego.Router("api/goods/category", &controllers.GoodsController{}, "get:Goods_Category")
@@ -59,6 +69,4 @@ func init() {
 
 	beego.Router("api/footprint/list", &controllers.FootprintController{}, "get:Footprint_List")
 	beego.Router("api/footprint/delete", &controllers.FootprintController{}, "post:Footprint_Delete")
-
-	beego.Router("api/upload/upload", &controllers.PicstoreController{}, "post:DoUploadHandler")
 }

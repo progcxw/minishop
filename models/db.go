@@ -89,7 +89,6 @@ type MinishopChannel struct {
 	Id        int    `json:"id"`
 	Name      string `json:"name"`
 	SortOrder int    `json:"sort_order"`
-	Url       string `json:"url"`
 }
 
 type MinishopCollect struct {
@@ -173,6 +172,20 @@ type MinishopGoods struct {
 	SellVolume        int    `json:"sell_volume"`
 	SortOrder         int    `json:"sort_order"`
 	UnitPrice         string `json:"unit_price"`
+}
+
+type MinishopPostGoods struct {
+	Id          int    `json:"id"`
+	AddTime     int64  `json:"add_time"`
+	CateId      int    `json:"category_id"`
+	Price       string `json:"price"`
+	Postage     string `json:"postage"`
+	Description string `json:"description"`
+	Keywords    string `json:"keywords"`
+	ListPicUrl  string `json:"list_pic_url"`
+	Name        string `json:"name"`
+	City        string `json:"city"`
+	Company     string `json:"company"`
 }
 
 type MinishopGoodsAttribute struct {
@@ -347,13 +360,35 @@ type MinishopUserLevel struct {
 	Name        string `json:"name"`
 }
 
-// TableFile : 文件表结构体
+//MinishopPic : 图片储存结构体
 type MinishopPic struct {
 	Id       int
-	FileHash string
+	FileSha1 string
 	FileName string
 	FileSize int64
 	FileAddr string
+}
+
+type Chat struct {
+	Id          int64  `json:"id"`
+	U1          int    `json:"u1"`
+	U2          int    `json:"u2"`
+	GoodsId     int    `json:"goods_id"`
+	ShowToU1    bool   `json:"show_to_u1"`
+	ShowToU2    bool   `json:"show_to_u2"`
+	LastMessage string `json:"last_message"`
+	U1ToU2      bool   `json:"u1_to_u2"`
+	UnreadNum   int    `json:"unread_num"`
+	LastTime    int64  `json:"last_time"`
+}
+
+type History struct {
+	Id          int64  `json:"id"`
+	ChatId      int64  `json:"chat_id"`
+	U1ToU2      bool   `json:"u1_to_u2"`
+	MessageType int    `json:"message_type"`
+	MessageBody string `json:"message_body"`
+	SendTime    int64  `json:"send_time"`
 }
 
 // type User struct {
@@ -414,4 +449,8 @@ func init() {
 	orm.RegisterModel(new(MinishopUserLevel))
 
 	orm.RegisterModel(new(MinishopPic))
+	orm.RegisterModel(new(MinishopPostGoods))
+
+	orm.RegisterModel(new(Chat))
+	orm.RegisterModel(new(History))
 }

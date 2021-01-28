@@ -22,6 +22,6 @@ func main() {
 
 	beego.InsertFilter("/api/*", beego.BeforeExec, services.FilterFunc, true, true)
 
-	beego.Run() // listen and serve on 0.0.0.0:8080
+	beego.Run() // listen and serve on 0.0.0.0:8360
 
 }

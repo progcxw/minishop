@@ -6,6 +6,9 @@ import (
 	"github.com/astaxie/beego"
 )
 
+//PicStoreAPI 用于生成图片url
+const PicStoreAPI = "http://81.71.134.143:8360/api/image/get?fileSha1="
+
 // 存储类型(表示文件存到哪里)
 type StoreType int
 
@@ -25,17 +28,30 @@ const (
 
 const (
 	// TempLocalRootDir : 本地临时存储地址的路径
-	TempLocalRootDir = "/data/fileserver_tmp/"
+	TempLocalRootDir = "/home/ubuntu/fileserver_tmp/"
 	// MergeLocalRootDir : 本地存储地址的路径(包含普通上传及分块上传)
-	MergeLocalRootDir = "/data/fileserver_merge/"
+	MergeLocalRootDir = "/home/ubuntu/fileserver_merge/"
 	// ChunckLocalRootDir : 分块存储地址的路径
-	ChunckLocalRootDir = "/data/fileserver_chunk/"
+	ChunckLocalRootDir = "/home/ubuntu/fileserver_chunk/"
 	// CephRootDir : Ceph的存储路径prefix
-	CephRootDir = "/ceph"
+	CephRootDir = "/home/ubuntu/ceph"
 	// OSSRootDir : OSS的存储路径prefix
-	OSSRootDir = "oss/"
+	OSSRootDir = "/home/ubuntu/oss/"
 	// CurrentStoreType : 设置当前文件的存储类型
 	CurrentStoreType = StoreLocal
+)
+
+const (
+	//SysMessage 系统消息
+	SysMessage = 0
+	//UserMessage 用户发送的消息
+	UserMessage = 1
+	//EstablishChat 单方建立的对话，不展示给对方
+	EstablishChat = 2
+	//FirstChat 第一次给对方发送消息，双方可见
+	FirstChat = 3
+	//UnreadNum 未读消息
+	UnreadNum = 4
 )
 
 /*

@@ -22,7 +22,6 @@ type AuthLoginBody struct {
 }
 
 func (this *AuthController) Auth_LoginByWeixin() {
-
 	var alb AuthLoginBody
 	body := this.Ctx.Input.RequestBody
 
@@ -51,6 +50,7 @@ func (this *AuthController) Auth_LoginByWeixin() {
 	userinfo["id"] = user.Id
 	userinfo["username"] = user.Username
 	userinfo["nickname"] = user.Nickname
+	userinfo["openId"] = user.WeixinOpenid
 	userinfo["gender"] = user.Gender
 	userinfo["avatar"] = user.Avatar
 	userinfo["birthday"] = user.Birthday
