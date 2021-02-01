@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"minishop/services"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/websocket"
 
 	"minishop/models"
@@ -72,16 +74,19 @@ func (this *ChatController) OnOpen() {
 
 	var msg models.WsMessage
 	for {
+		fmt.Println("listening the port from ", user.Nickname)
+
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			fmt.Println("reading message from ", user.Nickname, " err: ", err)
 			return
 		}
 
+		fmt.Println("receive the origin message: ", message)
 		json.Unmarshal(message, &msg)
 
 		fmt.Println("receive message from ", user.Nickname, " message: ", msg)
-		sendMessage(msg.SenderId, msg.ReceiverId, msg.MessageType, msg.ChatId, msg.MessageBody)
+		go sendMessage(msg.SenderId, msg.ReceiverId, msg.MessageType, msg.ChatId, msg.MessageBody)
 	}
 }
 
@@ -230,6 +235,8 @@ func (this *ChatController) GetChatForm() {
 		return
 	}
 
+	fmt.Println("get chat form request from chatId: ", chatId)
+
 	//填写chatForm信息
 	var chatForm models.ChatForm
 	var chat models.Chat
@@ -260,6 +267,8 @@ func (this *ChatController) GetChatForm() {
 
 	//将未读消息填入chatForm，并将自己未读的消息设为已读
 	conn := services.RedisPool().Get()
+	defer conn.Close()
+
 	data, err := conn.Do("GET", chatId)
 	if err != nil {
 		fmt.Println("getChatForm getting unread message error: ", err)
@@ -267,19 +276,24 @@ func (this *ChatController) GetChatForm() {
 	}
 
 	if data != nil {
+		var buf bytes.Buffer
+		buf.Write([]byte("["))
+		buf.Write(data.([]byte))
+		buf.Write([]byte("]"))
+		wsData := buf.Bytes()
+
 		var unreadMsg []models.WsMessage
-		err = json.Unmarshal(data.([]uint8), &unreadMsg)
+		err = json.Unmarshal(wsData, &unreadMsg)
 		if err != nil {
 			fmt.Println("chatForm json unmarshal error: ", err)
-			return
-		}
+		} else {
+			unreadHisList := models.WsListToHisList(unreadMsg)
+			chatForm.HistoryList = append(chatForm.HistoryList, unreadHisList...)
 
-		unreadHisList := models.WsListToHisList(unreadMsg)
-		chatForm.HistoryList = append(chatForm.HistoryList, unreadHisList...)
-
-		if unreadMsg[0].ReceiverId == userId {
-			conn.Do("DEL", chatId)
-			o.QueryTable("chat").Filter("id", chatId).Update(orm.Params{"unread_num": 0})
+			if unreadMsg[0].ReceiverId == userId {
+				conn.Do("DEL", chatId)
+				o.QueryTable("chat").Filter("id", chatId).Update(orm.Params{"unread_num": 0})
+			}
 		}
 	}
 
@@ -335,12 +349,18 @@ func sendMessage(senderId, receiverId, messageType int, chatId int64, message st
 
 	if wsConn, ok := chatMapper[receiverId]; !ok {
 		//将未读消息加入redis
-		fmt.Println("sendmessage didn't find a live conn, receiver id= ", receiverId)
 		conn := services.RedisPool().Get()
+		defer conn.Close()
+
 		unreadMsg, err := json.Marshal(m)
 		if err != nil {
 			fmt.Println("sendmessage json marshal error: ", err)
 			return
+		}
+
+		keyExist, _ := redis.Bool(conn.Do("exist", chatId))
+		if keyExist == true {
+			conn.Do("APPEND", []byte(","))
 		}
 
 		_, err = conn.Do("APPEND", chatId, unreadMsg)
@@ -349,7 +369,6 @@ func sendMessage(senderId, receiverId, messageType int, chatId int64, message st
 			return
 		}
 	} else {
-		fmt.Println("发送成功")
 		err := wsConn.WriteJSON(m)
 		if err != nil {
 			fmt.Println("sendmessage failed, error: ", err)
@@ -372,7 +391,7 @@ func sendMessage(senderId, receiverId, messageType int, chatId int64, message st
 		}
 	}
 
-	fmt.Println("wow we are updating chat")
+	fmt.Println("wow we are updating chat, chatId: ", chatId)
 
 	//更新chat中最后一条信息
 	_, err := o.QueryTable("chat").Filter("id", chatId).Update(orm.Params{
