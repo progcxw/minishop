@@ -177,10 +177,10 @@ type MinishopGoods struct {
 type MinishopPostGoods struct {
 	Id          int    `json:"id"`
 	AddTime     int64  `json:"add_time"`
-	CateId      int    `json:"category_id"`
-	Price       string `json:"price"`
+	UserId      int    `json:"user_id"`
+	Price       string `json:"retail_price"`
 	Postage     string `json:"postage"`
-	Description string `json:"description"`
+	Description string `json:"goods_brief"`
 	Keywords    string `json:"keywords"`
 	ListPicUrl  string `json:"list_pic_url"`
 	Name        string `json:"name"`
@@ -391,10 +391,10 @@ type History struct {
 	SendTime    int64  `json:"send_time"`
 }
 
-// type User struct {
-// 	Id   int    `orm:"not null pk autoincr INT(11)"`
-// 	Name string `orm:"not null default '' VARCHAR(100)"`
-// }
+type Sheets struct {
+	Id      int64  `json:"id"`
+	Content string `json:"content"`
+}
 
 func init() {
 
@@ -453,4 +453,6 @@ func init() {
 
 	orm.RegisterModel(new(Chat))
 	orm.RegisterModel(new(History))
+
+	orm.RegisterModel(new(Sheets))
 }

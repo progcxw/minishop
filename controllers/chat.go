@@ -276,6 +276,7 @@ func (this *ChatController) GetChatForm() {
 	}
 
 	if data != nil {
+		//将每个单独的wsmessage转换并拼接成的json数据转换为[]WsMessage形式的json数据
 		var buf bytes.Buffer
 		buf.Write([]byte("["))
 		buf.Write(data.([]byte))

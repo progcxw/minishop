@@ -21,12 +21,12 @@ type locationMessage struct {
 }
 
 type postGoodObj struct {
-	Name    string `json:"name"`
-	Desc    string `json:"desc"`
-	Price   string `json:"price"`
-	Postage string `json:"postage"`
-	Images  []string
-	CateId  int `json:"cateId"`
+	Name    string   `json:"name"`
+	Desc    string   `json:"desc"`
+	Price   string   `json:"price"`
+	Postage string   `json:"postage"`
+	Images  []string `json:"images"`
+	UserId  int      `json:"user_id"`
 }
 
 func (this *PostController) Post_CityLocation() {
@@ -57,7 +57,7 @@ func (this *PostController) PostGoodsHandler() {
 		Price:       postGood.Price,
 		Postage:     postGood.Postage,
 		ListPicUrl:  url,
-		CateId:      postGood.CateId,
+		UserId:      postGood.UserId,
 		AddTime:     utils.GetTimestamp(),
 		City:        services.UserLocation,
 	}

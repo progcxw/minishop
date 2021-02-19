@@ -72,11 +72,6 @@ func (this *IndexController) Index_Index() {
 		var mapids []orm.Params
 		o.QueryTable(category).Filter("parent_id", categoryItem.Id).Values(&mapids, "id")
 
-		// var valIds []int64
-		// for _, value := range mapids {
-		// 	valIds = append(valIds, value["Id"].(int64))
-		// }
-
 		valIds := utils.ExactMapValues2Int64Array(mapids, "Id")
 
 		var categorygoods []orm.Params

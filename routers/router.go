@@ -14,10 +14,14 @@ func init() {
 
 	beego.Router("api/auth/loginByWeixin", &controllers.AuthController{}, "post:Auth_LoginByWeixin")
 
+	beego.Router("api/sheets/index", &controllers.SheetsController{}, "get:SheetsIndex")
+	beego.Router("api/sheets/message", &controllers.SheetsController{}, "get:SheetsMsg")
+
 	beego.Router("ws/open", &controllers.ChatController{}, "get:OnOpen")
 	beego.Router("api/ws/close", &controllers.ChatController{}, "post:OnClose")
 	beego.Router("api/chat/index", &controllers.ChatController{}, "get:GetChatIndex")
 	beego.Router("api/chat/form", &controllers.ChatController{}, "get:GetChatForm")
+	beego.Router("api/chat/open", &controllers.ChatController{}, "get:CreateChat")
 
 	beego.Router("api/post/goods", &controllers.PostController{}, "post:PostGoodsHandler")
 	beego.Router("api/post/location", &controllers.PostController{}, "post:Post_CityLocation")
@@ -31,6 +35,8 @@ func init() {
 	beego.Router("api/goods/new", &controllers.GoodsController{}, "get:Goods_New")
 	beego.Router("api/goods/hot", &controllers.GoodsController{}, "get:Goods_Hot")
 	beego.Router("api/goods/related", &controllers.GoodsController{}, "get:Goods_Related")
+
+	beego.Router("api/post_goods/detail", &controllers.PostGoodsController{}, "get:Postgoods_Detail")
 
 	beego.Router("api/cart/index", &controllers.CartController{}, "get:Cart_Index")
 	beego.Router("api/cart/add", &controllers.CartController{}, "post:Cart_Add")
